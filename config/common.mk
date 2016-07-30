@@ -247,6 +247,8 @@ ifndef CM_BUILDTYPE
     endif
 endif
 
+CM_BUILDTYPE := PureCM
+
 # Filter out random types, so it'll reset to UNOFFICIAL
 ifeq ($(filter RELEASE NIGHTLY SNAPSHOT EXPERIMENTAL,$(CM_BUILDTYPE)),)
     CM_BUILDTYPE :=
@@ -296,7 +298,14 @@ ifeq ($(CM_BUILDTYPE), RELEASE)
         endif
     endif
 else
-    CM_VERSION := $(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(shell date -u +%Y%m%d)-$(CM_BUILDTYPE)$(CM_EXTRAVERSION)-$(CM_BUILD)
+    ifeq ($(PRODUCT_VERSION_MINOR),0)
+    
+        CM_BUILDTYPE := PureCM
+        CM_VERSION := $(PRODUCT_VERSION_MAJOR)-$(shell date -u +%Y%m%d)-$(CM_BUILDTYPE)$(CM_EXTRAVERSION)-$(CM_BUILD)
+    else 
+        CM_BUILDTYPE := PureCM
+        CM_VERSION := $(PRODUCT_VERSION_MAJOR).$(PRODUCT_VERSION_MINOR)-$(shell date -u +%Y%m%d)-$(CM_BUILDTYPE)$(CM_EXTRAVERSION)-$(CM_BUILD)
+    endif   
 endif
 
 PRODUCT_PROPERTY_OVERRIDES += \
